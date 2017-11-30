@@ -2,33 +2,23 @@
 //  AppDelegate.swift
 //  Flash Chat
 //
-//  The App Delegate listens for events from the system. 
-//  It recieves application level messages like did the app finish launching or did it terminate etc. 
+//  Created by Konstantin Konstantinov on 11/24/17.
+//  Copyright © 2017 Konstantin Konstantinov. All rights reserved.
 //
 
 import UIKit
 import Firebase
-
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
         FirebaseApp.configure()
-        
-        let myDatabase = Database.database().reference()
-        myDatabase.setValue("We've got data")
         
         return true
     }
-
-    
-    
-    
     
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -51,15 +41,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-//MARK: - Uncomment this only once you've gotten to Step 14.
-    /*
-    
-let APP_ID = "5H62DKM7JuG6kBBzVICydweQkSQTZD8vsFtoEEew"
-let CLIENT_KEY = "UMkw6hwriImwSAEtwxlMbrJXtcccrTR6jdcRS9IN"
-    
-*/
-
 
 }
 

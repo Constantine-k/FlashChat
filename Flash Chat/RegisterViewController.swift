@@ -2,11 +2,13 @@
 //  RegisterViewController.swift
 //  Flash Chat
 //
-//  This is the View Controller which registers new users with Firebase
+//  Created by Konstantin Konstantinov on 11/24/17.
+//  Copyright © 2017 Konstantin Konstantinov. All rights reserved.
 //
 
 import UIKit
 import Firebase
+import SVProgressHUD
 
 class RegisterViewController: UIViewController {
 
@@ -29,10 +31,13 @@ class RegisterViewController: UIViewController {
         guard let email = emailTextfield.text,
             let password = passwordTextfield.text else { return }
         
+        SVProgressHUD.show()
+        
         Auth.auth().createUser(withEmail: email, password: password) { [weak self] (user, error) in
             if error != nil {
                 print(error!)
             } else {
+                SVProgressHUD.dismiss()
                 self?.performSegue(withIdentifier: "goToChat", sender: self)
             }
         }

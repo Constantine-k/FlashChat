@@ -2,24 +2,12 @@
 //  WelcomeViewController.swift
 //  Flash Chat
 //
-//  This is the welcome view controller - the first thign the user sees
+//  Created by Konstantin Konstantinov on 11/24/17.
+//  Copyright © 2017 Konstantin Konstantinov. All rights reserved.
 //
 
 import UIKit
 
-
-
 class WelcomeViewController: UIViewController {
-
-   
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-    
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
     
 }

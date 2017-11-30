@@ -2,12 +2,14 @@
 //  ViewController.swift
 //  Flash Chat
 //
-//  Created by Angela Yu on 29/08/2015.
-//  Copyright (c) 2015 London App Brewery. All rights reserved.
+//  Created by Konstantin Konstantinov on 11/24/17.
+//  Copyright © 2017 Konstantin Konstantinov. All rights reserved.
 //
 
 import UIKit
 import Firebase
+import ChameleonFramework
+import SVProgressHUD
 
 class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     
@@ -17,6 +19,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet var sendButton: UIButton!
     @IBOutlet var messageTextfield: UITextField!
     @IBOutlet var messageTableView: UITableView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,9 +38,9 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         configureTableView()
         retreiveMessages()
+        
+        messageTableView.separatorStyle = .none
     }
-
-    ///////////////////////////////////////////
     
     //MARK: - TableView DataSource Methods
     
@@ -52,6 +55,20 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.senderUsername.text = messageArray[indexPath.row].sender
         cell.avatarImageView.image = UIImage(named: "egg")
         
+        if let currentUserEmail = Auth.auth().currentUser?.email {
+            if messageArray[indexPath.row].sender == currentUserEmail {
+                cell.messageBackground.backgroundColor = UIColor.flatSkyBlue()
+                cell.avatarImageView.backgroundColor = UIColor.flatMint()
+                cell.senderUsername.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.65)
+                cell.messageBody.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            } else {
+                cell.messageBackground.backgroundColor = UIColor(red: 0.90, green: 0.90, blue: 0.92, alpha: 1.0)
+                cell.avatarImageView.backgroundColor = UIColor.flatWatermelon()
+                cell.senderUsername.textColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.65)
+                cell.messageBody.textColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.75)
+            }
+        }
+        
         return cell
     }
     
@@ -64,8 +81,6 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         messageTableView.rowHeight = UITableViewAutomaticDimension
         messageTableView.estimatedRowHeight = 120
     }
-    
-    ///////////////////////////////////////////
     
     //MARK:- TextField Delegate Methods
     
@@ -83,14 +98,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-    ///////////////////////////////////////////
-    
-    
     //MARK: - Send & Recieve from Firebase
-    
-    
-    
-    
     
     @IBAction func sendPressed(_ sender: AnyObject) {
         sendButton.isEnabled = false
@@ -120,23 +128,18 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         let messagesDB = Database.database().reference().child("Message")
         
         messagesDB.observe(.childAdded) { (snapshot) in
+            
             guard let snapshotValue = snapshot.value as? Dictionary<String, String>,
                 let text = snapshotValue["MessageBody"],
                 let sender = snapshotValue["Sender"] else { return }
             
             self.messageArray.append(Message(sender: sender, messageBody: text))
             
-            self.configureTableView()
             self.messageTableView.reloadData()
         }
     }
     
-
-    
-    
-    
     @IBAction func logOutPressed(_ sender: AnyObject) {
-        
         do {
             try Auth.auth().signOut()
             
@@ -144,7 +147,6 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         } catch {
             print("Error: \(error)")
         }
-        
     }
 
 }
